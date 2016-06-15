@@ -1,6 +1,7 @@
 # Maintainer: Cameron Banta <cbanta@gmail.com>
 # Contributor: Jeff Bilyk <jbilyk@gmail.com>
 # Contributor: Bartłomiej Piotrowski <nospam@bpiotrowski.pl>
+# Contributor: noscript <mygthub@gmail.com>
 
 pkgname=nginx
 pkgver=1.9.15

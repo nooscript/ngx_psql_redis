@@ -1,6 +1,6 @@
 FROM alpine:3.4
 
-MAINTAINER NGINX Docker Maintainer "docker-maint@nginx.com"
+MAINTAINER NGINX Docker Maintainers "docker-maint@nginx.com"
 MAINTAINER NGINX noscript "mygthub@gmail.com"
 
 ENV NGINX_VERSION 1.9.15
@@ -26,7 +26,7 @@ ENV CONFIG "\
         --add-module=/usr/src/ngx_devel_kit \
         --add-module=/usr/src/form-input-nginx-module \
         --add-module=/usr/src/rds-json-nginx-module \
-	--add-module=/usr/src/ngx_redislog_module \
+	--add-dynamic-module=/usr/src/ngx_redislog_module \
 	--add-dynamic-module=/usr/src/echo-nginx-module \
         --add-dynamic-module=/usr/src/redis2-nginx-module \
         --add-dynamic-module=/usr/src/srcache-nginx-module \
@@ -56,7 +56,7 @@ ENV CONFIG "\
 	--with-mail_ssl_module \
 	--with-file-aio \
 	--with-http_v2_module \
-	--with-ipv6 \
+#	--with-ipv6 \
 	"
 
 RUN \
@@ -163,14 +163,14 @@ RUN \
 	&& apk add --virtual .nginx-rundeps $runDeps \
 	&& apk del .build-deps \
 	&& rm -rf /usr/src/* \
-	&& apk add --no-cache gettext \
+#	&& apk add --no-cache gettext \
 	\
 	# forward request and error logs to docker log collector
 	&& ln -sf /dev/stdout /var/log/nginx/access.log \
 	&& ln -sf /dev/stderr /var/log/nginx/error.log
 
-#COPY nginx.conf /etc/nginx/nginx.conf
-#COPY nginx.vh.default.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.vh.default.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80 443
 

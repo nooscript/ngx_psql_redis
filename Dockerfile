@@ -26,6 +26,7 @@ ENV CONFIG "\
         --add-module=/usr/src/ngx_devel_kit \
         --add-module=/usr/src/form-input-nginx-module \
         --add-module=/usr/src/rds-json-nginx-module \
+	--add-module=/usr/src/ngx_redislog_module \
 	--add-dynamic-module=/usr/src/echo-nginx-module \
         --add-dynamic-module=/usr/src/redis2-nginx-module \
         --add-dynamic-module=/usr/src/srcache-nginx-module \
@@ -84,6 +85,7 @@ RUN \
 	&& curl -fSL https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz -o ngx_devel_kit.tar.gz \
 	&& curl -fSL https://github.com/calio/form-input-nginx-module/archive/v0.12.tar.gz -o form-input-nginx-module.tar.gz \
 	&& curl -fSL https://github.com/openresty/rds-json-nginx-module/archive/v0.14.tar.gz -o rds-json-nginx-module.tar.gz \
+	&& curl -fSL https://github.com/nooscript/ngx_psql_redis/raw/master/ngx_redislog.tar.gz -o ngx_redislog.tar.gz \
 	&& curl -fSL http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz -o nginx.tar.gz \
 	&& curl -fSL http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc  -o nginx.tar.gz.asc \
 	&& export GNUPGHOME="$(mktemp -d)" \
@@ -91,6 +93,7 @@ RUN \
 	&& gpg --batch --verify nginx.tar.gz.asc nginx.tar.gz \
 	&& rm -r "$GNUPGHOME" nginx.tar.gz.asc \
 	&& mkdir -p /usr/src \
+	&& tar -zxC /usr/src -f ngx_redislog.tar.gz \
 	&& tar -zxC /usr/src -f ngx_http_redis.tar.gz \
 	&& mv /usr/src/ngx_http_redis* /usr/src/ngx_http_redis \
 	&& tar -zxC /usr/src -f redis2-nginx-module.tar.gz \
@@ -108,6 +111,7 @@ RUN \
 	&& tar -zxC /usr/src -f rds-json-nginx-module.tar.gz \
 	&& mv /usr/src/rds-json-nginx-module* /usr/src/rds-json-nginx-module \
 	&& tar -zxC /usr/src -f nginx.tar.gz \
+	&& rm ngx_redislog.tar.gz \
 	&& rm ngx_http_redis.tar.gz \
 	&& rm redis2-nginx-module.tar.gz \
 	&& rm echo-nginx-module.tar.gz \
